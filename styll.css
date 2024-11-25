@@ -1,0 +1,95 @@
+#user{
+    display: flex;
+    color: white;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 5px;
+    
+}
+#server{
+    display: flex;
+    color: white;
+    padding-bottom: 5px;
+}
+div#text {
+    overflow-wrap: anywhere;
+    border-radius: 17px;
+    background-color: rgb(71, 71, 71);
+}
+div#window {
+    display: flex;
+    padding: 15px;
+    max-width: 500px;
+    height: 673px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(91 91 91);
+    box-shadow: 3px 0px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    flex-direction: column;
+    justify-content: flex-end;
+}
+div#messages {
+    background-color: rgb(20 20 20);
+    height: 100%;
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+    padding: 10px;
+    word-wrap: break-word;
+  }
+div#interface {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+textarea#messageInput {
+    padding: 10px;
+    height: 150px;
+    border-radius: 39px;
+    border: none;
+    background-color: rgb(71, 71, 71);
+    color: white;
+    resize: none;
+    outline : none;
+    box-shadow: 0px 2px 8px 2px rgba(141,150,178,.3);
+}
+
+div#cnop {
+    top: -46px;
+    height: 1px;
+    display: flex;
+    position: relative;
+    justify-content: flex-end;
+}
+
+#messages p {
+    color: white;
+    padding: 5px;
+}
+button{
+    height: 32px;
+    border: 1px solid rgba(0, 255, 0, 0.603);
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: none;
+    cursor: pointer;
+    
+    display: flex;
+    margin: 5px 10px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    line-height: 15px;
+    text-transform: uppercase;
+    color: green;
+    background-color: rgb(71, 71, 71);
+    transition: 0.3s;
+}
+
+button:hover {
+    box-shadow: 0px 2px 8px 2px rgba(141,150,178,.3);
+    transform: scale(1.05);
+  }

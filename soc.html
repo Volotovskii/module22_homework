@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WebSocket</title>
+    <link rel="stylesheet" href="styll.css">
+    <!-- add Bootstrap Введите текст здесь...-->
+
+</head>
+
+<body>
+    <div id="window">
+        <div id="messages">
+            <div id="notification">notification</div>
+            <div id="answer">answer</div>
+        </div>
+        <div id="interface">
+
+            <!--  <input type="text" id="messageInput" placeholder="Введите сообщение" required>-->
+            <textarea type="text" id="messageInput" placeholder="Введите сообщение" required></textarea>
+            <div id="cnop">
+                <button id="sendMessage">Отправить</button>
+                <button id="sendGeo">Гео-локация</button>
+            </div>
+
+        </div>
+    </div>
+    <!--<textarea type="text" id="messageInput1" placeholder="Введите сообщение" required></textarea>-->
+
+    </div>
+
+    <div id="WebSocket"></div>
+
+
+
+
+    <script>
+
+
+        const messageInput = document.getElementById('messageInput');
+        const chat = document.getElementById('messages');
+
+        const btnGeo = document.getElementById('sendGeo');
+        const btnSend = document.getElementById('sendMessage');
+
+        const answer = document.getElementById("answer");
+        const notification = document.getElementById("notification");
+
+        const Web = document.getElementById("WebSocket");
+
+        const ws = new WebSocket('wss://echo.websocket.org/');
+
+
+        function addMessage(message, sender, node) {//div
+            if (node === Web) {   // TODO ? 
+                const messageElement = document.createElement('p');
+                messageElement.textContent = `${sender}: ${message}`;
+                Web.appendChild(messageElement);
+           //     Web.scrollTop = Web.scrollHeight;
+                return;
+            }
+            const element = document.createElement('div');
+            element.setAttribute("id", sender);
+            element.textContent = `${sender}:`;
+            chat.appendChild(element);
+
+            const text = document.createElement('div');
+            text.setAttribute("id", 'text');
+            element.appendChild(text);
+
+            const messageElement = document.createElement('p');
+            messageElement.textContent = `${message}`;
+            text.appendChild(messageElement);
+           // node.scrollTop = node.scrollHeight;
+        }
+
+        ws.onmessage = event => {  // ответ от сервера
+            const message = event.data;
+
+            if (message.startsWith("https://www.openstreetmap.org/")) {
+                //геолокация, игнорируем
+                return;
+            }
+            if (message.startsWith("Request served by")) {
+                //Это ответ при конекте 
+                addMessage(message, 'server', Web);
+                return;
+            }
+            addMessage(message, 'server', answer);
+        }
+
+        ws.onopen = () => { // TODO del
+            console.log('Соединение установлено');
+            addMessage('Соединение установлено', 'server', Web);
+        };
+        ws.onclose = () =>{
+            alert('Сервер не доступен (обновите страницу)');
+            addMessage("DISCONNECTED ", 'server', Web);
+  };
+        ws.onerror = error => {
+            console.error('Ошибка соединения:', error);
+            addMessage("Ошибка соединения: ", 'server', Web);
+        };
+
+
+        btnSend.addEventListener('click', () => {
+            const message = messageInput.value;
+
+            if (message.trim() !== '') {
+                addMessage(message, 'user', notification);
+
+                ws.send(message);
+                messageInput.value = '';
+            }
+        });
+
+        btnGeo.addEventListener('click', () => { // TODO error 
+            if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(position => {
+                const { latitude, longitude } = position.coords;
+                const geoUrl = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
+  
+                addMessage(geoUrl, 'user',notification);
+
+                //ws.send(geoUrl);
+            }), error => {
+                console.error('Ошибка получения геолокации:', error);
+                addMessage('Ошибка получения геолокации', 'map',Web);
+            };}else{
+                console.error('Геолокация не поддерживается', error);
+                addMessage('Геолокация не поддерживается', 'map',Web);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
