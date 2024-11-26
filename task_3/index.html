@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>taskr_3</title>
+
+  <!-- add Bootstrap Введите текст здесь...-->
+  <style>
+    button {
+      padding: 10px 20px;
+      background-color: #000000;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <button id="getInfoButton">Получить информацию</button>
+  <div id="output"></div>
+
+  <script>
+
+    const button = document.getElementById('getInfoButton');
+    const outputDiv = document.getElementById('output');
+
+    button.addEventListener('click', () => {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      outputDiv.innerHTML = `Размеры экрана: ${screenWidth} x ${screenHeight}<br>`;
+
+      // Координаты 
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            outputDiv.innerHTML += `Координаты: ${latitude}, ${longitude}`;
+          },
+          (error) => {
+            outputDiv.innerHTML += "Информация о местоположении недоступна";
+          }
+        );
+      } else {
+        outputDiv.innerHTML += "Информация о местоположении недоступна";
+      }
+    });
+
+  </script>
+
+</body>
+
+</html>
